@@ -13,7 +13,7 @@ float *buf_p_out[1];
 
 void dsp_init(size_t buf_size)
 {
-    initmydsp(&dsp, 48000);
+    initmydsp(dsp, 48000);
     // buildUserInterfacemydsp(&dsp, &ui_glue);
     // buf[0] = (float *)malloc(buf_size * sizeof(float));
 }
