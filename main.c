@@ -6,6 +6,7 @@ mydsp *dsp = (mydsp *)BFLB_PSRAM_BASE;
 
 float buf_in[256];
 float buf_out[256];
+float *buf_ps[2];
 
 void dsp_init(size_t buf_size)
 {
@@ -19,12 +20,15 @@ int main(void)
 {
     board_init();
 
+    buf_ps[0] = buf_in;
+    buf_ps[1] = buf_out;
+
     printf("dsp_init\r\n");
     dsp_init(BUF_SIZE);
 
     while (1) {
         printf("main loop");
-        computemydsp(dsp, 256, buf_in, buf_out);
+        computemydsp(dsp, 256, buf_ps[0], buf_ps[1]);
         bflb_mtimer_delay_ms(1000);
     }
 }
