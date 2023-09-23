@@ -4,7 +4,7 @@
 
 #define BUF_SIZE 256
 
-mydsp *dsp = (mydsp *)BFLB_PSRAM_BASE;
+mydsp *dsp;
 
 float buf_in[BUF_SIZE];
 float buf_out[BUF_SIZE];
@@ -25,6 +25,8 @@ int main(void)
 
     buf_p_in[0] = buf_in;
     buf_p_out[0] = buf_out;
+
+    dsp = (mydsp *)BFLB_PSRAM_BASE;
 
     printf("dsp_init\r\n");
     dsp_init(BUF_SIZE);
