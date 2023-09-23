@@ -70,7 +70,7 @@ static void refresh_dma(int tictoc)
 
 static void dsp_init(size_t buf_size)
 {
-    initmydsp(dsp, 8000);
+    initmydsp(dsp, 48000);
     // buildUserInterfacemydsp(dsp, &ui_glue);
 }
 
@@ -87,7 +87,7 @@ static void audac_gpio_init(void)
 static void audac_init(void)
 {
     struct bflb_audac_init_config_s audac_init_cfg = {
-        .sampling_rate = AUDAC_SAMPLING_RATE_8K,
+        .sampling_rate = AUDAC_SAMPLING_RATE_48K,
         .output_mode = AUDAC_OUTPUT_MODE_PWM,
         // .source_channels_num = AUDAC_SOURCE_CHANNEL_DUAL,
         .source_channels_num = AUDAC_SOURCE_CHANNEL_SINGLE,
