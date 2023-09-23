@@ -162,8 +162,9 @@ int main(void)
 {
     board_init();
 
-    buf_p_in[0] = buf_in;
-    buf_p_out[0] = buf_out;
+    // buf_p_in[0] = buf_in;
+    // buf_p_out[0] = buf_out;
+    buf_p_out[0] = (float *)malloc(BUF_SIZE * sizeof(float));
 
     // dsp = (mydsp *)BFLB_PSRAM_BASE;
 
