@@ -33,7 +33,7 @@ struct bflb_dma_channel_lli_transfer_s transfers_toc[1];
 
 static void dsp_run(int16_t *dest){
     printf("run");
-    computemydsp(dsp, BUF_SIZE, buf_p_in, buf_p_out);
+    computemydsp(dsp, BUF_SIZE, NULL, buf_p_out);
     for(int i=0;i<BUF_SIZE;i++){
         float val = buf_p_out[0][i];
         int16_t i16 = val * 32767;
