@@ -1437,7 +1437,7 @@ void computemydsp(mydsp* dsp, int count, FAUSTFLOAT** RESTRICT inputs, FAUSTFLOA
 			dsp->fVec3[0] = fTemp8;
 			float fTemp9 = ((iTemp6) ? 0.0f : dsp->fConst3 + dsp->fRec40[1]);
 			dsp->fRec40[0] = fTemp9 - floorf(fTemp9);
-			float fTemp10 = dsp->fConst1 * (float)(dsp->iVec1[1]) * (fTemp8 - dsp->fVec3[1]) * (float)((((2.0f * (float)(dsp->fRec40[0] <= 0.01f) + -1.0f) == 1.0f) ? 1 : 0));
+			float fTemp10 = dsp->fConst1 * (float)(dsp->iVec1[1]) * (fTemp8 - dsp->fVec3[1]) * (((2.0f * (float)(dsp->fRec40[0] <= 0.01f) + -1.0f) == 1.0f) ? 0.5f : 0.0f);
 			dsp->fVec4[0] = fSlow2;
 			float fTemp11 = fSlow2 + dsp->fVec4[1];
 			dsp->fVec5[0] = fSlow3;
@@ -1663,7 +1663,7 @@ void computemydsp(mydsp* dsp, int count, FAUSTFLOAT** RESTRICT inputs, FAUSTFLOA
 			float fTemp125 = dsp->fVec47[(dsp->IOTA0 - min(8192, max(0, (int)(fTemp124)))) & 16383];
 			dsp->fVec48[0] = fTemp125;
 			float fTemp126 = floorf(fTemp124);
-			dsp->fRec75[0] = dsp->fVec48[1] - (fTemp126 + (2.0f - dsp->fRec76[0])) * (dsp->fRec75[1] - fTemp125) / (dsp->fRec76[0] - fTemp126);
+			dsp->fRec75[0] = dsp->fVec48[1] + (fTemp126 + (2.0f - dsp->fRec76[0])) * (fTemp125 - dsp->fRec75[1]) / (dsp->fRec76[0] - fTemp126);
 			dsp->fRec10[0] = dsp->fRec75[0];
 			dsp->fVec49[dsp->IOTA0 & 16383] = 0.0f - (fTemp3 * dsp->fRec10[1] + fTemp31 * fTemp109);
 			dsp->fRec77[0] = 0.9999f * (dsp->fRec77[1] + (float)(iTemp6 * iSlow47)) + fSlow48;
@@ -1687,7 +1687,7 @@ void computemydsp(mydsp* dsp, int count, FAUSTFLOAT** RESTRICT inputs, FAUSTFLOA
 			float fTemp134 = dsp->fVec53[(dsp->IOTA0 - min(8192, max(0, (int)(fTemp133)))) & 16383];
 			dsp->fVec54[0] = fTemp134;
 			float fTemp135 = floorf(fTemp133);
-			dsp->fRec5[0] = dsp->fVec54[1] - (fTemp135 + (2.0f - dsp->fRec80[0])) * (dsp->fRec5[1] - fTemp134) / (dsp->fRec80[0] - fTemp135);
+			dsp->fRec5[0] = dsp->fVec54[1] + (fTemp135 + (2.0f - dsp->fRec80[0])) * (fTemp134 - dsp->fRec5[1]) / (dsp->fRec80[0] - fTemp135);
 			dsp->fRec3[0] = dsp->fRec5[0];
 			dsp->fVec55[dsp->IOTA0 & 16383] = dsp->fRec6[1] * fTemp3 + fTemp31 * fTemp115;
 			dsp->fRec82[0] = 0.9999f * (dsp->fRec82[1] + (float)(iTemp6 * iSlow53)) + fSlow54;
