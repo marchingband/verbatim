@@ -55,6 +55,16 @@ typedef struct {
 	int iConst8;
 } mydsp;
 
+static int min(int a, int b)
+{
+    return (a < b ? a : b);
+}
+
+static int max(int a, int b)
+{
+    return (a > b ? a : b);
+}
+
 mydsp* newmydsp() { 
 	mydsp* dsp = (mydsp*)calloc(1, sizeof(mydsp));
 	return dsp;
