@@ -25,6 +25,7 @@ extern "C" {
 #include <math.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <dsp.h>
 
 typedef struct {
 	int iVec0[2];
