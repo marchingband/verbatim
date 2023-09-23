@@ -182,8 +182,8 @@ int main(void)
     bflb_audac_feature_control(audac_hd, AUDAC_CMD_PLAY_START, 0);
 
     while (1) {
-        printf("main loop");
+        // printf("main loop");
         // computemydsp(dsp, BUF_SIZE, buf_p_in, buf_p_out);
-        bflb_mtimer_delay_ms(1000);
+        bflb_mtimer_delay_ms(10000);
     }
 }
