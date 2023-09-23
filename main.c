@@ -12,7 +12,7 @@
 #define BUF_SIZE 64
 
 // dsp
-mydsp *dsp;
+mydsp dsp;
 float buf_in[BUF_SIZE];
 float buf_out[BUF_SIZE];
 float *buf_p_in[1];
@@ -33,7 +33,7 @@ struct bflb_dma_channel_lli_transfer_s transfers_toc[1];
 
 static void dsp_run(int16_t *dest){
     printf("run");
-    computemydsp(dsp, BUF_SIZE, NULL, buf_p_out);
+    computemydsp(&dsp, BUF_SIZE, NULL, buf_p_out);
     for(int i=0;i<BUF_SIZE;i++){
         float val = buf_p_out[0][i];
         int16_t i16 = val * 32767;
@@ -74,7 +74,7 @@ static void refresh_dma(int tictoc)
 
 static void dsp_init(size_t buf_size)
 {
-    initmydsp(dsp, 32000);
+    initmydsp(&dsp, 32000);
     // buildUserInterfacemydsp(&dsp, &ui_glue);
 }
 
@@ -165,7 +165,7 @@ int main(void)
     buf_p_in[0] = buf_in;
     buf_p_out[0] = buf_out;
 
-    dsp = (mydsp *)BFLB_PSRAM_BASE;
+    // dsp = (mydsp *)BFLB_PSRAM_BASE;
 
     printf("dsp_init\r\n");
     dsp_init(BUF_SIZE);
