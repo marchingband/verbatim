@@ -34,7 +34,7 @@ static struct bflb_dma_channel_lli_pool_s lli_pool_toc[10];
 struct bflb_dma_channel_lli_transfer_s transfers_toc[1];
 
 static void dsp_run(int16_t *dest){
-    computemydsp(dsp, buf_len, NULL, buf);
+    computemydsp(dsp, BUF_SIZE, buf_p_in, buf_p_out);
     for(int i=0;i<buf_len;i++){
         float val = buf[0][i];
         int16_t i16 = val * 32767;
@@ -188,7 +188,7 @@ int main(void)
 
     while (1) {
         printf("main loop");
-        computemydsp(dsp, BUF_SIZE, buf_p_in, buf_p_out);
+        // computemydsp(dsp, BUF_SIZE, buf_p_in, buf_p_out);
         bflb_mtimer_delay_ms(1000);
     }
 }
