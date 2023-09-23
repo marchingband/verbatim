@@ -9,9 +9,7 @@
 #include "board.h"
 #include "reverb.h"
 
-
 #define BUF_SIZE 64
-
 
 // dsp
 mydsp *dsp;
@@ -23,6 +21,7 @@ float *buf_p_out[1];
 // audac
 static uint16_t tic[BUF_SIZE];
 static uint16_t toc[BUF_SIZE];
+
 struct bflb_device_s *audac_dma_hd;
 struct bflb_device_s *audac_hd;
 uint32_t dma_lli_cnt_tic;
@@ -33,6 +32,7 @@ static struct bflb_dma_channel_lli_pool_s lli_pool_toc[10];
 struct bflb_dma_channel_lli_transfer_s transfers_toc[1];
 
 static void dsp_run(int16_t *dest){
+    printf("run");
     computemydsp(dsp, BUF_SIZE, buf_p_in, buf_p_out);
     for(int i=0;i<BUF_SIZE;i++){
         float val = buf_p_out[0][i];
