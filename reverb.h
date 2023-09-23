@@ -41,9 +41,9 @@ static float mydsp_faustpower2_f(float value) {
 #endif
 
 typedef struct {
+	int iVec0[2];
 	int fSampleRate;
 	float fConst1;
-	int iVec0[2];
 	float fConst2;
 	float fRec9[2];
 	float fVec1[2];
@@ -116,7 +116,7 @@ void metadatamydsp(MetaGlue* m) {
 	m->declare(m->metaInterface, "filters.lib/allpass_comb:author", "Julius O. Smith III");
 	m->declare(m->metaInterface, "filters.lib/allpass_comb:copyright", "Copyright (C) 2003-2019 by Julius O. Smith III <jos@ccrma.stanford.edu>");
 	m->declare(m->metaInterface, "filters.lib/allpass_comb:license", "MIT-style STK-4.3 license");
-	m->declare(m->metaInterface, "filters.lib/lowpass0_highpass1", "MIT-style STK-4.3 license");
+	m->declare(m->metaInterface, "filters.lib/lowpass0_highpass1", "Copyright (C) 2003-2019 by Julius O. Smith III <jos@ccrma.stanford.edu>");
 	m->declare(m->metaInterface, "filters.lib/name", "Faust Filters Library");
 	m->declare(m->metaInterface, "filters.lib/version", "0.3");
 	m->declare(m->metaInterface, "maths.lib/author", "GRAME");
@@ -422,11 +422,11 @@ void instanceConstantsmydsp(mydsp* dsp, int sample_rate) {
 	dsp->iConst4 = (int)(0.036666665f * fConst0);
 	dsp->iConst5 = (int)(0.035306122f * fConst0);
 	dsp->iConst6 = (int)(0.033809524f * fConst0);
-	dsp->iConst7 = (int)(0.0322449f * fConst0);
-	dsp->iConst8 = (int)(0.030748298f * fConst0);
-	dsp->iConst9 = (int)(0.028956916f * fConst0);
-	dsp->iConst10 = (int)(0.026938776f * fConst0);
-	dsp->iConst11 = (int)(0.025306122f * fConst0);
+	dsp->iConst7 = (int)(0.026938776f * fConst0);
+	dsp->iConst8 = (int)(0.025306122f * fConst0);
+	dsp->iConst9 = (int)(0.0322449f * fConst0);
+	dsp->iConst10 = (int)(0.028956916f * fConst0);
+	dsp->iConst11 = (int)(0.030748298f * fConst0);
 	dsp->iConst12 = min(1024, max(0, (int)(0.0126077095f * fConst0) + -1));
 	dsp->iConst13 = min(1024, max(0, (int)(0.01f * fConst0) + -1));
 	dsp->iConst14 = min(1024, max(0, (int)(0.0077324263f * fConst0) + -1));
@@ -463,7 +463,7 @@ void computemydsp(mydsp* dsp, int count, FAUSTFLOAT** RESTRICT inputs, FAUSTFLOA
 			dsp->fVec1[0] = fTemp2;
 			float fTemp3 = ((iTemp0) ? 0.0f : dsp->fConst3 + dsp->fRec10[1]);
 			dsp->fRec10[0] = fTemp3 - floorf(fTemp3);
-			float fTemp4 = dsp->fConst1 * (float)(dsp->iVec0[1]) * (fTemp2 - dsp->fVec1[1]) * (((2.0f * (float)(dsp->fRec10[0] <= 0.1f) + -1.0f) == 1.0f) ? 0.5f : 0.0f);
+			float fTemp4 = dsp->fConst1 * (float)(dsp->iVec0[1]) * (fTemp2 - dsp->fVec1[1]) * (((2.0f * (float)(dsp->fRec10[0] <= 0.1f) + -1.0f) == 1.0f) ? 0.2f : 0.0f);
 			dsp->fRec11[0] = 0.2f * dsp->fRec11[1] + 0.8f * dsp->fRec8[1];
 			dsp->fVec2[dsp->IOTA0 & 8191] = fTemp4 + 0.92f * dsp->fRec11[0];
 			dsp->fRec8[0] = dsp->fVec2[(dsp->IOTA0 - dsp->iConst4) & 8191];
@@ -477,7 +477,7 @@ void computemydsp(mydsp* dsp, int count, FAUSTFLOAT** RESTRICT inputs, FAUSTFLOA
 			dsp->fVec5[dsp->IOTA0 & 8191] = fTemp4 + 0.92f * dsp->fRec17[0];
 			dsp->fRec16[0] = dsp->fVec5[(dsp->IOTA0 - dsp->iConst7) & 8191];
 			dsp->fRec19[0] = 0.2f * dsp->fRec19[1] + 0.8f * dsp->fRec18[1];
-			dsp->fVec6[dsp->IOTA0 & 8191] = fTemp4 + 0.92f * dsp->fRec19[0];
+			dsp->fVec6[dsp->IOTA0 & 8191] = 0.92f * dsp->fRec19[0] + fTemp4;
 			dsp->fRec18[0] = dsp->fVec6[(dsp->IOTA0 - dsp->iConst8) & 8191];
 			dsp->fRec21[0] = 0.2f * dsp->fRec21[1] + 0.8f * dsp->fRec20[1];
 			dsp->fVec7[dsp->IOTA0 & 8191] = fTemp4 + 0.92f * dsp->fRec21[0];
@@ -486,21 +486,21 @@ void computemydsp(mydsp* dsp, int count, FAUSTFLOAT** RESTRICT inputs, FAUSTFLOA
 			dsp->fVec8[dsp->IOTA0 & 8191] = fTemp4 + 0.92f * dsp->fRec23[0];
 			dsp->fRec22[0] = dsp->fVec8[(dsp->IOTA0 - dsp->iConst10) & 8191];
 			dsp->fRec25[0] = 0.2f * dsp->fRec25[1] + 0.8f * dsp->fRec24[1];
-			dsp->fVec9[dsp->IOTA0 & 8191] = 0.92f * dsp->fRec25[0] + fTemp4;
+			dsp->fVec9[dsp->IOTA0 & 8191] = fTemp4 + 0.92f * dsp->fRec25[0];
 			dsp->fRec24[0] = dsp->fVec9[(dsp->IOTA0 - dsp->iConst11) & 8191];
-			float fTemp5 = dsp->fRec8[0] + dsp->fRec12[0] + dsp->fRec14[0] + dsp->fRec16[0] + dsp->fRec18[0] + dsp->fRec20[0] + dsp->fRec22[0] + dsp->fRec24[0] + 0.69f * dsp->fRec6[1];
+			float fTemp5 = 0.69f * dsp->fRec6[1] + dsp->fRec8[0] + dsp->fRec12[0] + dsp->fRec14[0] + dsp->fRec16[0] + dsp->fRec18[0] + dsp->fRec20[0] + dsp->fRec22[0] + dsp->fRec24[0];
 			dsp->fVec10[dsp->IOTA0 & 2047] = fTemp5;
 			dsp->fRec6[0] = dsp->fVec10[(dsp->IOTA0 - dsp->iConst12) & 2047];
 			float fRec7 = 0.0f - 0.69f * fTemp5;
-			float fTemp6 = fRec7 + 0.69f * dsp->fRec4[1] + dsp->fRec6[1];
+			float fTemp6 = dsp->fRec6[1] + fRec7 + 0.69f * dsp->fRec4[1];
 			dsp->fVec11[dsp->IOTA0 & 2047] = fTemp6;
 			dsp->fRec4[0] = dsp->fVec11[(dsp->IOTA0 - dsp->iConst13) & 2047];
 			float fRec5 = 0.0f - 0.69f * fTemp6;
-			float fTemp7 = fRec5 + 0.69f * dsp->fRec2[1] + dsp->fRec4[1];
+			float fTemp7 = dsp->fRec4[1] + fRec5 + 0.69f * dsp->fRec2[1];
 			dsp->fVec12[dsp->IOTA0 & 2047] = fTemp7;
 			dsp->fRec2[0] = dsp->fVec12[(dsp->IOTA0 - dsp->iConst14) & 2047];
 			float fRec3 = 0.0f - 0.69f * fTemp7;
-			float fTemp8 = fRec3 + 0.69f * dsp->fRec0[1] + dsp->fRec2[1];
+			float fTemp8 = dsp->fRec2[1] + fRec3 + 0.69f * dsp->fRec0[1];
 			dsp->fVec13[dsp->IOTA0 & 1023] = fTemp8;
 			dsp->fRec0[0] = dsp->fVec13[(dsp->IOTA0 - dsp->iConst15) & 1023];
 			float fRec1 = 0.0f - 0.69f * fTemp8;
