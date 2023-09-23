@@ -27,53 +27,9 @@ extern "C" {
 #include <stdlib.h>
 #include <dsp.h>
 
-typedef struct {
-	int iVec0[2];
-	int iRec0[2];
-} mydspSIG0;
-
-static mydspSIG0* newmydspSIG0() { return (mydspSIG0*)calloc(1, sizeof(mydspSIG0)); }
-static void deletemydspSIG0(mydspSIG0* dsp) { free(dsp); }
-
-int getNumInputsmydspSIG0(mydspSIG0* RESTRICT dsp) {
-	return 0;
+static float mydsp_faustpower2_f(float value) {
+	return value * value;
 }
-int getNumOutputsmydspSIG0(mydspSIG0* RESTRICT dsp) {
-	return 1;
-}
-
-static void instanceInitmydspSIG0(mydspSIG0* dsp, int sample_rate) {
-	/* C99 loop */
-	{
-		int l0;
-		for (l0 = 0; l0 < 2; l0 = l0 + 1) {
-			dsp->iVec0[l0] = 0;
-		}
-	}
-	/* C99 loop */
-	{
-		int l1;
-		for (l1 = 0; l1 < 2; l1 = l1 + 1) {
-			dsp->iRec0[l1] = 0;
-		}
-	}
-}
-
-static void fillmydspSIG0(mydspSIG0* dsp, int count, float* table) {
-	/* C99 loop */
-	{
-		int i1;
-		for (i1 = 0; i1 < count; i1 = i1 + 1) {
-			dsp->iVec0[0] = 1;
-			dsp->iRec0[0] = (dsp->iVec0[1] + dsp->iRec0[1]) % 65536;
-			table[i1] = sinf(9.58738e-05f * (float)(dsp->iRec0[0]));
-			dsp->iVec0[1] = dsp->iVec0[0];
-			dsp->iRec0[1] = dsp->iRec0[0];
-		}
-	}
-}
-
-static float ftbl0mydspSIG0[65536];
 
 #ifndef FAUSTCLASS 
 #define FAUSTCLASS mydsp
@@ -85,10 +41,18 @@ static float ftbl0mydspSIG0[65536];
 #endif
 
 typedef struct {
-	int iVec1[2];
 	int fSampleRate;
-	float fConst0;
-	float fRec1[2];
+	float fConst1;
+	int iVec0[2];
+	float fConst2;
+	float fRec0[2];
+	float fVec1[2];
+	int IOTA0;
+	float fVec2[128];
+	float fConst5;
+	int iConst6;
+	float fConst7;
+	int iConst8;
 } mydsp;
 
 mydsp* newmydsp() { 
@@ -101,9 +65,6 @@ void deletemydsp(mydsp* dsp) {
 }
 
 void metadatamydsp(MetaGlue* m) { 
-	m->declare(m->metaInterface, "basics.lib/name", "Faust Basic Element Library");
-	m->declare(m->metaInterface, "basics.lib/tabulateNd", "Copyright (C) 2023 Bart Brouns <bart@magnetophon.nl>");
-	m->declare(m->metaInterface, "basics.lib/version", "0.10");
 	m->declare(m->metaInterface, "compile_options", "-lang c -ct 1 -es 1 -mcd 16 -single -ftz 0");
 	m->declare(m->metaInterface, "filename", "reverb.dsp");
 	m->declare(m->metaInterface, "maths.lib/author", "GRAME");
@@ -112,7 +73,11 @@ void metadatamydsp(MetaGlue* m) {
 	m->declare(m->metaInterface, "maths.lib/name", "Faust Math Library");
 	m->declare(m->metaInterface, "maths.lib/version", "2.6");
 	m->declare(m->metaInterface, "name", "reverb");
+	m->declare(m->metaInterface, "oscillators.lib/lf_sawpos:author", "Bart Brouns, revised by Stéphane Letz");
+	m->declare(m->metaInterface, "oscillators.lib/lf_sawpos:licence", "STK-4.3");
 	m->declare(m->metaInterface, "oscillators.lib/name", "Faust Oscillator Library");
+	m->declare(m->metaInterface, "oscillators.lib/sawN:author", "Julius O. Smith III");
+	m->declare(m->metaInterface, "oscillators.lib/sawN:license", "STK-4.3");
 	m->declare(m->metaInterface, "oscillators.lib/version", "0.4");
 	m->declare(m->metaInterface, "platform.lib/name", "Generic Platform Library");
 	m->declare(m->metaInterface, "platform.lib/version", "0.3");
@@ -130,10 +95,6 @@ int getNumOutputsmydsp(mydsp* RESTRICT dsp) {
 }
 
 void classInitmydsp(int sample_rate) {
-	mydspSIG0* sig0 = newmydspSIG0();
-	instanceInitmydspSIG0(sig0, sample_rate);
-	fillmydspSIG0(sig0, 65536, ftbl0mydspSIG0);
-	deletemydspSIG0(sig0);
 }
 
 void instanceResetUserInterfacemydsp(mydsp* dsp) {
@@ -142,23 +103,46 @@ void instanceResetUserInterfacemydsp(mydsp* dsp) {
 void instanceClearmydsp(mydsp* dsp) {
 	/* C99 loop */
 	{
-		int l2;
-		for (l2 = 0; l2 < 2; l2 = l2 + 1) {
-			dsp->iVec1[l2] = 0;
+		int l0;
+		for (l0 = 0; l0 < 2; l0 = l0 + 1) {
+			dsp->iVec0[l0] = 0;
 		}
 	}
 	/* C99 loop */
 	{
+		int l1;
+		for (l1 = 0; l1 < 2; l1 = l1 + 1) {
+			dsp->fRec0[l1] = 0.0f;
+		}
+	}
+	/* C99 loop */
+	{
+		int l2;
+		for (l2 = 0; l2 < 2; l2 = l2 + 1) {
+			dsp->fVec1[l2] = 0.0f;
+		}
+	}
+	dsp->IOTA0 = 0;
+	/* C99 loop */
+	{
 		int l3;
-		for (l3 = 0; l3 < 2; l3 = l3 + 1) {
-			dsp->fRec1[l3] = 0.0f;
+		for (l3 = 0; l3 < 128; l3 = l3 + 1) {
+			dsp->fVec2[l3] = 0.0f;
 		}
 	}
 }
 
 void instanceConstantsmydsp(mydsp* dsp, int sample_rate) {
 	dsp->fSampleRate = sample_rate;
-	dsp->fConst0 = 1e+03f / fminf(1.92e+05f, fmaxf(1.0f, (float)(dsp->fSampleRate)));
+	float fConst0 = fminf(1.92e+05f, fmaxf(1.0f, (float)(dsp->fSampleRate)));
+	dsp->fConst1 = 0.00025f * fConst0;
+	dsp->fConst2 = 1e+03f / fConst0;
+	float fConst3 = fmaxf(0.0f, fminf(2047.0f, 0.0005f * fConst0));
+	float fConst4 = floorf(fConst3);
+	dsp->fConst5 = fConst4 + (1.0f - fConst3);
+	dsp->iConst6 = (int)(fConst3);
+	dsp->fConst7 = fConst3 - fConst4;
+	dsp->iConst8 = dsp->iConst6 + 1;
 }
 
 void instanceInitmydsp(mydsp* dsp, int sample_rate) {
@@ -183,12 +167,18 @@ void computemydsp(mydsp* dsp, int count, FAUSTFLOAT** RESTRICT inputs, FAUSTFLOA
 	{
 		int i0;
 		for (i0 = 0; i0 < count; i0 = i0 + 1) {
-			dsp->iVec1[0] = 1;
-			float fTemp0 = ((1 - dsp->iVec1[1]) ? 0.0f : dsp->fConst0 + dsp->fRec1[1]);
-			dsp->fRec1[0] = fTemp0 - floorf(fTemp0);
-			output0[i0] = (FAUSTFLOAT)(ftbl0mydspSIG0[max(0, min((int)(65536.0f * dsp->fRec1[0]), 65535))]);
-			dsp->iVec1[1] = dsp->iVec1[0];
-			dsp->fRec1[1] = dsp->fRec1[0];
+			dsp->iVec0[0] = 1;
+			float fTemp0 = ((1 - dsp->iVec0[1]) ? 0.0f : dsp->fConst2 + dsp->fRec0[1]);
+			dsp->fRec0[0] = fTemp0 - floorf(fTemp0);
+			float fTemp1 = mydsp_faustpower2_f(2.0f * dsp->fRec0[0] + -1.0f);
+			dsp->fVec1[0] = fTemp1;
+			float fTemp2 = (float)(dsp->iVec0[1]) * (fTemp1 - dsp->fVec1[1]);
+			dsp->fVec2[dsp->IOTA0 & 127] = fTemp2;
+			output0[i0] = (FAUSTFLOAT)(dsp->fConst1 * (fTemp2 - dsp->fConst5 * dsp->fVec2[(dsp->IOTA0 - dsp->iConst6) & 127] - dsp->fConst7 * dsp->fVec2[(dsp->IOTA0 - dsp->iConst8) & 127]));
+			dsp->iVec0[1] = dsp->iVec0[0];
+			dsp->fRec0[1] = dsp->fRec0[0];
+			dsp->fVec1[1] = dsp->fVec1[0];
+			dsp->IOTA0 = dsp->IOTA0 + 1;
 		}
 	}
 }

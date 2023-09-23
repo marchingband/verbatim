@@ -20,7 +20,6 @@ float buf_out[BUF_SIZE];
 float *buf_p_in[1];
 float *buf_p_out[1];
 
-
 // audac
 static uint16_t tic[BUF_SIZE];
 static uint16_t toc[BUF_SIZE];
