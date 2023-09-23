@@ -1,6 +1,9 @@
 #ifndef DSP_H
 #define DSP_H
 
+#define min(X, Y) (((X) < (Y)) ? (X) : (Y))
+#define max(X, Y) (((X) > (Y)) ? (X) : (Y))
+
 typedef struct {
 	struct UIGlue *uiInterface;
 	void (*openVerticalBox)(struct UIGlue *uiInterface, char* key);
