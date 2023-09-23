@@ -42,13 +42,13 @@ static float mydsp_faustpower2_f(float value) {
 
 typedef struct {
 	int iVec0[2];
+	float fRec9[2];
 	int fSampleRate;
 	float fConst1;
 	float fConst2;
-	float fRec9[2];
+	float fRec10[2];
 	float fVec1[2];
 	float fConst3;
-	float fRec10[2];
 	float fRec11[2];
 	int IOTA0;
 	float fVec2[8192];
@@ -176,14 +176,14 @@ void instanceClearmydsp(mydsp* dsp) {
 	{
 		int l2;
 		for (l2 = 0; l2 < 2; l2 = l2 + 1) {
-			dsp->fVec1[l2] = 0.0f;
+			dsp->fRec10[l2] = 0.0f;
 		}
 	}
 	/* C99 loop */
 	{
 		int l3;
 		for (l3 = 0; l3 < 2; l3 = l3 + 1) {
-			dsp->fRec10[l3] = 0.0f;
+			dsp->fVec1[l3] = 0.0f;
 		}
 	}
 	/* C99 loop */
@@ -419,14 +419,14 @@ void instanceConstantsmydsp(mydsp* dsp, int sample_rate) {
 	dsp->fConst1 = 0.0005f * fConst0;
 	dsp->fConst2 = 5e+02f / fConst0;
 	dsp->fConst3 = 0.5f / fConst0;
-	dsp->iConst4 = (int)(0.036666665f * fConst0);
-	dsp->iConst5 = (int)(0.035306122f * fConst0);
-	dsp->iConst6 = (int)(0.033809524f * fConst0);
-	dsp->iConst7 = (int)(0.026938776f * fConst0);
-	dsp->iConst8 = (int)(0.025306122f * fConst0);
-	dsp->iConst9 = (int)(0.0322449f * fConst0);
-	dsp->iConst10 = (int)(0.028956916f * fConst0);
-	dsp->iConst11 = (int)(0.030748298f * fConst0);
+	dsp->iConst4 = (int)(0.025306122f * fConst0);
+	dsp->iConst5 = (int)(0.026938776f * fConst0);
+	dsp->iConst6 = (int)(0.028956916f * fConst0);
+	dsp->iConst7 = (int)(0.030748298f * fConst0);
+	dsp->iConst8 = (int)(0.0322449f * fConst0);
+	dsp->iConst9 = (int)(0.033809524f * fConst0);
+	dsp->iConst10 = (int)(0.035306122f * fConst0);
+	dsp->iConst11 = (int)(0.036666665f * fConst0);
 	dsp->iConst12 = min(1024, max(0, (int)(0.0126077095f * fConst0) + -1));
 	dsp->iConst13 = min(1024, max(0, (int)(0.01f * fConst0) + -1));
 	dsp->iConst14 = min(1024, max(0, (int)(0.0077324263f * fConst0) + -1));
@@ -456,16 +456,16 @@ void computemydsp(mydsp* dsp, int count, FAUSTFLOAT** RESTRICT inputs, FAUSTFLOA
 		int i0;
 		for (i0 = 0; i0 < count; i0 = i0 + 1) {
 			dsp->iVec0[0] = 1;
+			dsp->fRec9[0] = 0.2f * dsp->fRec9[1] + 0.8f * dsp->fRec8[1];
 			int iTemp0 = 1 - dsp->iVec0[1];
-			float fTemp1 = ((iTemp0) ? 0.0f : dsp->fConst2 + dsp->fRec9[1]);
-			dsp->fRec9[0] = fTemp1 - floorf(fTemp1);
-			float fTemp2 = mydsp_faustpower2_f(2.0f * dsp->fRec9[0] + -1.0f);
+			float fTemp1 = ((iTemp0) ? 0.0f : dsp->fConst2 + dsp->fRec10[1]);
+			dsp->fRec10[0] = fTemp1 - floorf(fTemp1);
+			float fTemp2 = mydsp_faustpower2_f(2.0f * dsp->fRec10[0] + -1.0f);
 			dsp->fVec1[0] = fTemp2;
-			float fTemp3 = ((iTemp0) ? 0.0f : dsp->fConst3 + dsp->fRec10[1]);
-			dsp->fRec10[0] = fTemp3 - floorf(fTemp3);
-			float fTemp4 = dsp->fConst1 * (float)(dsp->iVec0[1]) * (fTemp2 - dsp->fVec1[1]) * (((2.0f * (float)(dsp->fRec10[0] <= 0.1f) + -1.0f) == 1.0f) ? 0.2f : 0.0f);
-			dsp->fRec11[0] = 0.2f * dsp->fRec11[1] + 0.8f * dsp->fRec8[1];
-			dsp->fVec2[dsp->IOTA0 & 8191] = fTemp4 + 0.92f * dsp->fRec11[0];
+			float fTemp3 = ((iTemp0) ? 0.0f : dsp->fConst3 + dsp->fRec11[1]);
+			dsp->fRec11[0] = fTemp3 - floorf(fTemp3);
+			float fTemp4 = dsp->fConst1 * (float)(dsp->iVec0[1]) * (fTemp2 - dsp->fVec1[1]) * (((2.0f * (float)(dsp->fRec11[0] <= 0.1f) + -1.0f) == 1.0f) ? 0.07f : 0.0f);
+			dsp->fVec2[dsp->IOTA0 & 8191] = 0.92f * dsp->fRec9[0] + fTemp4;
 			dsp->fRec8[0] = dsp->fVec2[(dsp->IOTA0 - dsp->iConst4) & 8191];
 			dsp->fRec13[0] = 0.2f * dsp->fRec13[1] + 0.8f * dsp->fRec12[1];
 			dsp->fVec3[dsp->IOTA0 & 8191] = fTemp4 + 0.92f * dsp->fRec13[0];
@@ -477,7 +477,7 @@ void computemydsp(mydsp* dsp, int count, FAUSTFLOAT** RESTRICT inputs, FAUSTFLOA
 			dsp->fVec5[dsp->IOTA0 & 8191] = fTemp4 + 0.92f * dsp->fRec17[0];
 			dsp->fRec16[0] = dsp->fVec5[(dsp->IOTA0 - dsp->iConst7) & 8191];
 			dsp->fRec19[0] = 0.2f * dsp->fRec19[1] + 0.8f * dsp->fRec18[1];
-			dsp->fVec6[dsp->IOTA0 & 8191] = 0.92f * dsp->fRec19[0] + fTemp4;
+			dsp->fVec6[dsp->IOTA0 & 8191] = fTemp4 + 0.92f * dsp->fRec19[0];
 			dsp->fRec18[0] = dsp->fVec6[(dsp->IOTA0 - dsp->iConst8) & 8191];
 			dsp->fRec21[0] = 0.2f * dsp->fRec21[1] + 0.8f * dsp->fRec20[1];
 			dsp->fVec7[dsp->IOTA0 & 8191] = fTemp4 + 0.92f * dsp->fRec21[0];
@@ -488,7 +488,7 @@ void computemydsp(mydsp* dsp, int count, FAUSTFLOAT** RESTRICT inputs, FAUSTFLOA
 			dsp->fRec25[0] = 0.2f * dsp->fRec25[1] + 0.8f * dsp->fRec24[1];
 			dsp->fVec9[dsp->IOTA0 & 8191] = fTemp4 + 0.92f * dsp->fRec25[0];
 			dsp->fRec24[0] = dsp->fVec9[(dsp->IOTA0 - dsp->iConst11) & 8191];
-			float fTemp5 = 0.69f * dsp->fRec6[1] + dsp->fRec8[0] + dsp->fRec12[0] + dsp->fRec14[0] + dsp->fRec16[0] + dsp->fRec18[0] + dsp->fRec20[0] + dsp->fRec22[0] + dsp->fRec24[0];
+			float fTemp5 = dsp->fRec8[0] + dsp->fRec12[0] + dsp->fRec14[0] + dsp->fRec16[0] + dsp->fRec18[0] + dsp->fRec20[0] + dsp->fRec22[0] + dsp->fRec24[0] + 0.69f * dsp->fRec6[1];
 			dsp->fVec10[dsp->IOTA0 & 2047] = fTemp5;
 			dsp->fRec6[0] = dsp->fVec10[(dsp->IOTA0 - dsp->iConst12) & 2047];
 			float fRec7 = 0.0f - 0.69f * fTemp5;
@@ -507,8 +507,8 @@ void computemydsp(mydsp* dsp, int count, FAUSTFLOAT** RESTRICT inputs, FAUSTFLOA
 			output0[i0] = (FAUSTFLOAT)(fRec1 + dsp->fRec0[1]);
 			dsp->iVec0[1] = dsp->iVec0[0];
 			dsp->fRec9[1] = dsp->fRec9[0];
-			dsp->fVec1[1] = dsp->fVec1[0];
 			dsp->fRec10[1] = dsp->fRec10[0];
+			dsp->fVec1[1] = dsp->fVec1[0];
 			dsp->fRec11[1] = dsp->fRec11[0];
 			dsp->IOTA0 = dsp->IOTA0 + 1;
 			dsp->fRec8[1] = dsp->fRec8[0];
