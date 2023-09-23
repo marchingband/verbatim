@@ -9,7 +9,7 @@
 #include "board.h"
 #include "reverb.h"
 
-#define BUF_SIZE 256
+#define BUF_SIZE 64
 
 // dsp
 mydsp *dsp;
